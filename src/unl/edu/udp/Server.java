@@ -116,6 +116,7 @@ public class Server extends Thread {
                 Random random = new Random();
                 do {
                     int numOfWrongGuess = 0;
+                    String guessed_Characters = "";
                     int randomNum = random.nextInt(wordList.size() - 1);
                     StringBuilder guessingWord = new StringBuilder(wordList.get(randomNum));
                     StringBuilder playersGuess = new StringBuilder(guessingWord);
@@ -124,7 +125,7 @@ public class Server extends Thread {
                     }
 
                     while (playGame) {
-                        StringBuilder outToClient = new StringBuilder().append(hangman_array[5-numOfWrongGuess]).append("\n\nYou have " + (5 - numOfWrongGuess) + " guesses \n" + "Word to guess: " + playersGuess + "\nEnter your guess character: ");
+                        StringBuilder outToClient = new StringBuilder().append(hangman_array[5-numOfWrongGuess]).append("\n\nYou have " + (5 - numOfWrongGuess) + " guesses" + "\nCharacters guess so far: " + guessed_Characters + "\nWord to guess: " + playersGuess + "\nEnter your guess character: ");
                         out_buffer = outToClient.toString().getBytes();
                         packet = new DatagramPacket(out_buffer, out_buffer.length, clientAddress, clientPort);
                         serverSocket.send(packet);
@@ -134,6 +135,10 @@ public class Server extends Thread {
 
                         String received = new String(packet.getData(), 0, packet.getLength());
                         char playersMove = received.charAt(0);
+
+                        if(!guessed_Characters.contains(String.valueOf(playersMove))) {
+                            guessed_Characters += (String.valueOf(playersMove));
+                        }
 
                         if (guessingWord.toString().contains(String.valueOf(playersMove))) {
                             int startingIndex = 0;

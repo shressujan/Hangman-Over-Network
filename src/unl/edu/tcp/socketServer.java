@@ -121,7 +121,7 @@ public class socketServer extends Thread {
                 Random random = new Random();
                 do {
                     int numOfWrongGuess = 0;
-
+                    String guessed_Characters = "";
                     int randomNum = random.nextInt(wordList.size() - 1);
 
                     StringBuilder guessingWord = new StringBuilder(wordList.get(randomNum));
@@ -133,9 +133,12 @@ public class socketServer extends Thread {
 
                     while (numOfWrongGuess < 5 && !guessingWord.toString().equalsIgnoreCase(playersGuess.toString())) {
                         // here server should serve the game to the player
-                        String message = hangman_array[5-numOfWrongGuess] + "\n\nYou have " + (5 - numOfWrongGuess) + " guesses \n" + "Word to guess: " + playersGuess + "\nEnter your guess character: ";
+                        String message = hangman_array[5-numOfWrongGuess] + "\n\nYou have " + (5 - numOfWrongGuess) + " guesses" + "\nCharacters guess so far: " + guessed_Characters + "\nWord to guess: " + playersGuess + "\nEnter your guess character: ";
                         outToClient.writeUTF(message);
                         char playersMove = inFromClient.readChar();
+                        if(!guessed_Characters.contains(String.valueOf(playersMove))) {
+                            guessed_Characters += (String.valueOf(playersMove));
+                        }
                         if (guessingWord.toString().contains(String.valueOf(playersMove))) {
                             int startingIndex = 0;
                             while (true) {
