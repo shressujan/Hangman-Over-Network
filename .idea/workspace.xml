@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98215c27-2209-4971-94d6-23e014bd973b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/socketServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/socketServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/socketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/socketServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/udp/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/udp/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/udp/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/udp/Client.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,7 +82,8 @@
       <workItem from="1575063355542" duration="296000" />
       <workItem from="1575145568805" duration="311000" />
       <workItem from="1575410105905" duration="4315000" />
-      <workItem from="1575426111781" duration="632000" />
+      <workItem from="1575426111781" duration="750000" />
+      <workItem from="1575484492285" duration="1032000" />
     </task>
     <servers />
   </component>

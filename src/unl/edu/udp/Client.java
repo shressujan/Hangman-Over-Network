@@ -7,11 +7,13 @@ import java.util.*;
 public class Client {
 
     public static void main(String[] args) throws IOException{
+        String host = args[0];
+
         Scanner scanner = new Scanner(System.in);
         byte[] in_buffer = new byte[10000];
 
         DatagramSocket clientSocket = new DatagramSocket();
-        InetAddress serverIP = InetAddress.getLocalHost();
+        InetAddress serverIP = InetAddress.getByName(host);
         int serverPort = 65321;
         byte[] buffer = null;
         boolean running = true;
