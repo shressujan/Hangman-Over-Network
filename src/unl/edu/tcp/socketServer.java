@@ -93,73 +93,70 @@ public class socketServer extends Thread {
         String[] hangman_array = {hangman_noloss, hangman_loss_one_leg, hangman_loss_two_legs, hangman_loss_one_arm, hangman_loss_two_arms, hangman_loss_head};
         while (true) {
             try {
+                while (true) {
                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
                 Socket server = serverSocket.accept();
                 System.out.println("Just connected to " + server.getRemoteSocketAddress());
 
-                DataOutputStream outToClient = new DataOutputStream(server.getOutputStream());
-                DataInputStream inFromClient = new DataInputStream(server.getInputStream());
+                    DataOutputStream outToClient = new DataOutputStream(server.getOutputStream());
+                    DataInputStream inFromClient = new DataInputStream(server.getInputStream());
 
-                outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress());
+                    outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nStart the Game? (y/n)");
 
-                char playGame = inFromClient.readChar();
-                if(playGame != ('y')) {
-                    System.out.println("See you soon!! bye");
-                    break;
-                }
+                    char playGame = inFromClient.readChar();
+                    if (playGame == ('y')) {
+                        char playAgain;
 
-                char playAgain;
-
-                BufferedReader reader = new BufferedReader(new FileReader("unl/edu/wordList.txt"));
-                String line = reader.readLine();
-                ArrayList<String> wordList = new ArrayList<>();
-                while (line != null) {
-                    wordList.add(line);
-                    line = reader.readLine();
-                }
-
-                Random random = new Random();
-                do {
-                    int numOfWrongGuess = 0;
-                    String guessed_Characters = "";
-                    int randomNum = random.nextInt(wordList.size() - 1);
-
-                    StringBuilder guessingWord = new StringBuilder(wordList.get(randomNum));
-                    StringBuilder playersGuess = new StringBuilder(guessingWord);
-
-                    for (int i = 0; i < playersGuess.length(); i++) {
-                        playersGuess.setCharAt(i, '_');
-                    }
-
-                    while (numOfWrongGuess < 5 && !guessingWord.toString().equalsIgnoreCase(playersGuess.toString())) {
-                        // here server should serve the game to the player
-                        String message = hangman_array[5-numOfWrongGuess] + "\n\nYou have " + (5 - numOfWrongGuess) + " guesses" + "\nCharacters guess so far: " + guessed_Characters + "\nWord to guess: " + playersGuess + "\nEnter your guess character: ";
-                        outToClient.writeUTF(message);
-                        char playersMove = inFromClient.readChar();
-                        if(!guessed_Characters.contains(String.valueOf(playersMove))) {
-                            guessed_Characters += (String.valueOf(playersMove));
+                        BufferedReader reader = new BufferedReader(new FileReader("unl/edu/wordList.txt"));
+                        String line = reader.readLine();
+                        ArrayList<String> wordList = new ArrayList<>();
+                        while (line != null) {
+                            wordList.add(line);
+                            line = reader.readLine();
                         }
-                        if (guessingWord.toString().contains(String.valueOf(playersMove))) {
-                            int startingIndex = 0;
-                            while (true) {
-                                int charIndex = guessingWord.toString().indexOf(playersMove, startingIndex);
-                                playersGuess.setCharAt(charIndex, playersMove);
-                                if (guessingWord.toString().indexOf(playersMove, ++charIndex) < 0) {
-                                    break;
+
+                        Random random = new Random();
+                        do {
+                            int numOfWrongGuess = 0;
+                            String guessed_Characters = "";
+                            int randomNum = random.nextInt(wordList.size() - 1);
+
+                            StringBuilder guessingWord = new StringBuilder(wordList.get(randomNum));
+                            StringBuilder playersGuess = new StringBuilder(guessingWord);
+
+                            for (int i = 0; i < playersGuess.length(); i++) {
+                                playersGuess.setCharAt(i, '_');
+                            }
+
+                            while (numOfWrongGuess < 5 && !guessingWord.toString().equalsIgnoreCase(playersGuess.toString())) {
+                                // here server should serve the game to the player
+                                String message = hangman_array[5 - numOfWrongGuess] + "\n\nYou have " + (5 - numOfWrongGuess) + " guesses" + "\nCharacters guess so far: " + guessed_Characters + "\nWord to guess: " + playersGuess + "\nEnter your guess character: ";
+                                outToClient.writeUTF(message);
+                                char playersMove = inFromClient.readChar();
+                                if (!guessed_Characters.contains(String.valueOf(playersMove))) {
+                                    guessed_Characters += (String.valueOf(playersMove));
+                                }
+                                if (guessingWord.toString().contains(String.valueOf(playersMove))) {
+                                    int startingIndex = 0;
+                                    while (true) {
+                                        int charIndex = guessingWord.toString().indexOf(playersMove, startingIndex);
+                                        playersGuess.setCharAt(charIndex, playersMove);
+                                        if (guessingWord.toString().indexOf(playersMove, ++charIndex) < 0) {
+                                            break;
+                                        } else {
+                                            startingIndex = charIndex;
+                                        }
+                                    }
                                 } else {
-                                    startingIndex = charIndex;
+                                    numOfWrongGuess++;
                                 }
                             }
-                        } else {
-                            numOfWrongGuess++;
-                        }
+                            outToClient.writeUTF(hangman_array[5 - numOfWrongGuess] + "\n\nThe word was: " + guessingWord + " \nGame Over!! Play again? (y/n)");
+                            playAgain = inFromClient.readChar();
+                        } while (playAgain == 'y');
                     }
-                    outToClient.writeUTF(hangman_array[5-numOfWrongGuess] + "\n\nThe word was: " + guessingWord + " \nGame Over!! Play again? (y/n)");
-                    playAgain = inFromClient.readChar();
-                } while(playAgain == 'y');
-
-                outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
-                server.close();
+                    outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
+                }
             } catch (SocketTimeoutException s) {
                 openTcpPortFound = true;
                 System.out.printf("Port: %d is open \n", serverSocket.getLocalPort());
