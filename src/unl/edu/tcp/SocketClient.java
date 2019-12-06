@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class SocketClient {
 
    public static void main(String [] args) {
-      String host = args[0];
+      String host = "cse.unl.edu";
       int port = Integer.parseInt(args[1]);
       try {
          System.out.println("Connecting to " + host + " on port " + port);
