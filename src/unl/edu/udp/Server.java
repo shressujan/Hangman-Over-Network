@@ -7,6 +7,7 @@ import java.util.*;
 public class Server extends Thread {
 
     private DatagramSocket serverSocket;
+    private static boolean openTcpPortFound = false;
     private byte[] out_buffer = new byte[10000];
     private byte[] in_buffer = new byte[100];
 
@@ -82,114 +83,141 @@ public class Server extends Thread {
             "|__________|\n" +
             "\n";
 
-    public Server() throws IOException {
-        serverSocket = new DatagramSocket(65321);
+    public Server(int port) throws IOException {
+        serverSocket = new DatagramSocket(port);
+        if(!openTcpPortFound) {
+            serverSocket.setSoTimeout(100);
+        }
     }
 
     public void start() {
-        String[] hangman_array = {hangman_noloss, hangman_loss_one_leg, hangman_loss_two_legs, hangman_loss_one_arm, hangman_loss_two_arms, hangman_loss_head};
-        while (true) {
-            try {
-                while(true) {
-                    boolean playGame = true;
-                    DatagramPacket packet = new DatagramPacket(in_buffer, in_buffer.length);
-                    serverSocket.receive(packet);
+        String[] hangman_art_array = {hangman_noloss, hangman_loss_one_leg, hangman_loss_two_legs, hangman_loss_one_arm, hangman_loss_two_arms, hangman_loss_head};
 
-                    // Client info
-                    InetAddress clientAddress = packet.getAddress();
-                    int clientPort = packet.getPort();
+        Random random = new Random();
+        try {
+            //loads the file stored in the server
+            BufferedReader reader = new BufferedReader(new FileReader("unl/edu/wordList.txt"));
+            String line = reader.readLine();
+            ArrayList<String> wordList = new ArrayList<>();
+            while (line != null) {
+                wordList.add(line);
+                line = reader.readLine();
+            }
 
-                    String fromClient = new String(packet.getData(), 0, packet.getLength());
-                    if (fromClient.equalsIgnoreCase("y")){
-                        char playAgain;
+            //An infinite loop until the server is closed forcibly
+            while(true) {
 
-                        BufferedReader reader = new BufferedReader(new FileReader("unl/edu/wordList.txt"));
-                        String line = reader.readLine();
-                        ArrayList<String> wordList = new ArrayList<>();
-                        while (line != null) {
-                            wordList.add(line);
-                            line = reader.readLine();
+                DatagramPacket packet = new DatagramPacket(in_buffer, in_buffer.length);
+                serverSocket.receive(packet);
+
+                // Client info
+                InetAddress clientAddress = packet.getAddress();
+                int clientPort = packet.getPort();
+
+                String play_game = new String(packet.getData(), 0, packet.getLength());
+                if (play_game.equalsIgnoreCase("y")){
+
+                    char playAgain;
+                    do {
+                        String game_status = "play";
+                        int numOfWrongGuess = 0;
+                        String guessed_Characters = "";
+                        int randomNum = random.nextInt(wordList.size() - 1);
+                        StringBuilder guessingWord = new StringBuilder(wordList.get(randomNum));
+                        StringBuilder playersGuess = new StringBuilder(guessingWord);
+
+                        //create a word with, same length as the guessing word, filled with hyphens
+                        for (int i = 0; i < playersGuess.length(); i++) {
+                            playersGuess.setCharAt(i, '_');
                         }
+                        //Loops until game_status
+                        while (game_status.equalsIgnoreCase("play")) {
 
-                        Random random = new Random();
-                        do {
-                            int numOfWrongGuess = 0;
-                            String guessed_Characters = "";
-                            int randomNum = random.nextInt(wordList.size() - 1);
-                            StringBuilder guessingWord = new StringBuilder(wordList.get(randomNum));
-                            StringBuilder playersGuess = new StringBuilder(guessingWord);
-                            for (int i = 0; i < playersGuess.length(); i++) {
-                                playersGuess.setCharAt(i, '_');
-                            }
-
-                            while (playGame) {
-                                StringBuilder outToClient = new StringBuilder().append(hangman_array[5 - numOfWrongGuess]).append("\n\nYou have " + (5 - numOfWrongGuess) + " guesses" + "\nCharacters guess so far: " + guessed_Characters + "\nWord to guess: " + playersGuess + "\nEnter your guess character: ");
-                                out_buffer = outToClient.toString().getBytes();
-                                packet = new DatagramPacket(out_buffer, out_buffer.length, clientAddress, clientPort);
-                                serverSocket.send(packet);
-
-                                packet = new DatagramPacket(in_buffer, in_buffer.length);
-                                serverSocket.receive(packet);
-
-                                String received = new String(packet.getData(), 0, packet.getLength());
-                                char playersMove = received.charAt(0);
-
-                                if (!guessed_Characters.contains(String.valueOf(playersMove))) {
-                                    guessed_Characters += (String.valueOf(playersMove));
-                                }
-
-                                if (guessingWord.toString().contains(String.valueOf(playersMove))) {
-                                    int startingIndex = 0;
-                                    while (true) {
-                                        int charIndex = guessingWord.toString().indexOf(playersMove, startingIndex);
-                                        playersGuess.setCharAt(charIndex, playersMove);
-                                        if (guessingWord.toString().indexOf(playersMove, ++charIndex) < 0) {
-                                            break;
-                                        } else {
-                                            startingIndex = charIndex;
-                                        }
-                                    }
-                                } else {
-                                    numOfWrongGuess++;
-                                }
-
-                                if (numOfWrongGuess == 5 || guessingWord.toString().equalsIgnoreCase(playersGuess.toString())) {
-                                    playGame = false;
-                                }
-                            }
-                            StringBuilder outToClient = new StringBuilder().append(hangman_array[5 - numOfWrongGuess]).append("\n\nThe word was: " + guessingWord + "\nGame Over!! Play again? (y/n)");
+                            StringBuilder outToClient = new StringBuilder().append(hangman_art_array[5 - numOfWrongGuess]).append("\n\nYou have " + (5 - numOfWrongGuess) + " guesses" + "\nCharacters guess so far: " + guessed_Characters + "\nWord to guess: " + playersGuess + "\nEnter your guess character: ");
                             out_buffer = outToClient.toString().getBytes();
                             packet = new DatagramPacket(out_buffer, out_buffer.length, clientAddress, clientPort);
                             serverSocket.send(packet);
 
                             packet = new DatagramPacket(in_buffer, in_buffer.length);
                             serverSocket.receive(packet);
-                            String received = new String(packet.getData(), 0, packet.getLength());
-                            playAgain = received.charAt(0);
-                            if (playAgain != 'y') {
-                                break;
-                            }
-                            playGame = true;
-                        } while (playAgain == 'y');
 
-                        StringBuilder outToClient = new StringBuilder().append("Thank you for playing\nGoodbye!");
+                            String received = new String(packet.getData(), 0, packet.getLength());
+                            char playersMove = received.charAt(0);
+
+                            if (!guessed_Characters.contains(String.valueOf(playersMove))) {
+                                guessed_Characters += (String.valueOf(playersMove));
+                            }
+
+                            if (guessingWord.toString().contains(String.valueOf(playersMove))) {
+                                int startingIndex = 0;
+                                while (true) {
+                                    int charIndex = guessingWord.toString().indexOf(playersMove, startingIndex);
+                                    playersGuess.setCharAt(charIndex, playersMove);
+                                    if (guessingWord.toString().indexOf(playersMove, ++charIndex) < 0) {
+                                        break;
+                                    } else {
+                                        startingIndex = charIndex;
+                                    }
+                                }
+                            } else {
+                                numOfWrongGuess++;
+                            }
+
+                            //keep tracks of game status. Basically if number of wrong guesses is equal to 5, the game is lost. If guessing word is equal to players guessed word game is won
+                            if (numOfWrongGuess == 5 || guessingWord.toString().equalsIgnoreCase(playersGuess.toString())) {
+                                game_status = "stop";
+                            }
+                        }
+                        StringBuilder outToClient = new StringBuilder().append(hangman_art_array[5 - numOfWrongGuess]).append("\n\nThe word was: " + guessingWord + "\nGame Over!! Play again? (y/n)");
                         out_buffer = outToClient.toString().getBytes();
                         packet = new DatagramPacket(out_buffer, out_buffer.length, clientAddress, clientPort);
                         serverSocket.send(packet);
-                    }
+
+                        packet = new DatagramPacket(in_buffer, in_buffer.length);
+                        serverSocket.receive(packet);
+                        String received = new String(packet.getData(), 0, packet.getLength());
+                        playAgain = received.charAt(0);
+                        if (playAgain != 'y') {
+                            break;
+                        }
+                    } while (playAgain == 'y');
+
+                    StringBuilder outToClient = new StringBuilder().append("Thank you for playing\nGoodbye!");
+                    out_buffer = outToClient.toString().getBytes();
+                    packet = new DatagramPacket(out_buffer, out_buffer.length, clientAddress, clientPort);
+                    serverSocket.send(packet);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                serverSocket.close();
-                break;
             }
+        }catch (SocketTimeoutException s) {
+            openTcpPortFound = true;
+            System.out.printf("Port: %d is open \n", serverSocket.getLocalPort());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            serverSocket.close();
         }
     }
 
     public static void main(String[] args) {
+        int available_udp_port = 0;
+        int maxPortNumber = 65535;
+        for (int i = 0; i < maxPortNumber; i++) {
+            try {
+                Random randomGenerator = new Random();
+                int randomPort = randomGenerator.nextInt(maxPortNumber) + 1;
+                Thread t = new Server(randomPort);
+                t.start();
+                available_udp_port = randomPort;
+            } catch (IOException e) {
+            } finally {
+                if (available_udp_port != 0) {
+                    break;
+                }
+            }
+        }
+
         try {
-            Thread t = new Server();
+            Thread t = new Server(available_udp_port);
             t.start();
         } catch (IOException e) {
             e.printStackTrace();
