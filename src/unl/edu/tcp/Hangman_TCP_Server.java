@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class socketServer extends Thread {
+public class Hangman_TCP_Server extends Thread {
 
     private static boolean openTcpPortFound = false;
 
@@ -82,7 +82,7 @@ public class socketServer extends Thread {
 
     private ServerSocket serverSocket;
 
-    public socketServer(int port) throws IOException {
+    public Hangman_TCP_Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         if (!openTcpPortFound) {
             serverSocket.setSoTimeout(100);
@@ -110,7 +110,7 @@ public class socketServer extends Thread {
                 DataOutputStream outToClient = new DataOutputStream(server.getOutputStream());
                 DataInputStream inFromClient = new DataInputStream(server.getInputStream());
 
-                outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nStart the Game? (y/n)");
+                outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\n\nDo you want to play the Game? (y/n)");
 
                 char playGame = inFromClient.readChar();
                 if (playGame == ('y')) {
@@ -131,7 +131,7 @@ public class socketServer extends Thread {
                         while (numOfWrongGuess < 5 && !guessingWord.toString().equalsIgnoreCase(playersGuess.toString())) {
                             // here server should serve the game to the player
                             String message = hangman_art_array[5 - numOfWrongGuess] + "\n\nYou have " + (5 - numOfWrongGuess) + " guesses" + "\nCharacters guess so far: " +
-                                    "" + characters_guessed + "\nWord to guess: " + playersGuess + "\nEnter your guess character: ";
+                                    "" + characters_guessed + "\nWord to be guessed: " + playersGuess + "\nEnter your guess character: ";
                             outToClient.writeUTF(message);
 
                             char playersMove = inFromClient.readChar();
@@ -155,11 +155,11 @@ public class socketServer extends Thread {
                                 numOfWrongGuess++;
                             }
                         }
-                        outToClient.writeUTF(hangman_art_array[5 - numOfWrongGuess] + "\n\nThe word was: " + guessingWord + " \nGame Over!! Play again? (y/n)");
+                        outToClient.writeUTF(hangman_art_array[5 - numOfWrongGuess] + "\n\nThe word was: " + guessingWord + " \nGood Game!! \n\nDo you wish to Play again? (y/n)");
                         playAgain = inFromClient.readChar();
                     } while (playAgain == 'y');
                 }
-                outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
+                outToClient.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nSee you soon!! Goodbye!");
             }
         } catch (SocketTimeoutException s) {
             openTcpPortFound = true;
@@ -182,7 +182,7 @@ public class socketServer extends Thread {
             try {
                 Random randomGenerator = new Random();
                 int randomPort = randomGenerator.nextInt(maxPortNumber) + 1;
-                Thread t = new socketServer(randomPort);
+                Thread t = new Hangman_TCP_Server(randomPort);
                 t.start();
                 availableTcpPort = randomPort;
             } catch (IOException e) {
@@ -194,7 +194,7 @@ public class socketServer extends Thread {
         }
 
         try {
-            Thread t = new socketServer(availableTcpPort);
+            Thread t = new Hangman_TCP_Server(availableTcpPort);
             t.start();
         } catch (IOException e) {
             e.printStackTrace();

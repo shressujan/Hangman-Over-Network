@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98215c27-2209-4971-94d6-23e014bd973b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Hangman_TCP_Server.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/udp/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/udp/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/udp/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/udp/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/SocketClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Play_Hangman_Over_TCP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/SocketClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Play_Hangman_Over_TCP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/socketServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/socketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Hangman_TCP_Server.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +89,8 @@
       <workItem from="1575426111781" duration="750000" />
       <workItem from="1575484492285" duration="2519000" />
       <workItem from="1575583237391" duration="4262000" />
-      <workItem from="1575599335785" duration="2513000" />
+      <workItem from="1575599335785" duration="2750000" />
+      <workItem from="1575677808443" duration="631000" />
     </task>
     <servers />
   </component>

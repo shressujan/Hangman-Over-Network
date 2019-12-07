@@ -4,11 +4,11 @@ import java.net.*;
 import java.io.*;
 import java.util.Scanner;
 
-public class SocketClient {
+public class Play_Hangman_Over_TCP {
 
    public static void main(String [] args) {
       String host = "cse.unl.edu";
-      int port = Integer.parseInt(args[1]);
+      int port = Integer.parseInt(args[0]);
       try {
          System.out.println("Connecting to " + host + " on port " + port);
          Socket client = new Socket(host, port);
@@ -18,7 +18,6 @@ public class SocketClient {
          DataInputStream inFromServer = new DataInputStream(client.getInputStream());
          DataOutputStream outToServer = new DataOutputStream(client.getOutputStream());
 
-         System.out.println("Server says: \n");
          System.out.println(inFromServer.readUTF());
 
          Scanner scanner = new Scanner(System.in);
