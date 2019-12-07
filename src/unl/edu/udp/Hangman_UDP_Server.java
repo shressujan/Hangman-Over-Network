@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class Server extends Thread {
+public class Hangman_UDP_Server extends Thread {
 
     private DatagramSocket serverSocket;
     private static boolean openTcpPortFound = false;
@@ -83,7 +83,7 @@ public class Server extends Thread {
             "|__________|\n" +
             "\n";
 
-    public Server(int port) throws IOException {
+    public Hangman_UDP_Server(int port) throws IOException {
         serverSocket = new DatagramSocket(port);
         if(!openTcpPortFound) {
             serverSocket.setSoTimeout(100);
@@ -168,7 +168,7 @@ public class Server extends Thread {
                                 game_status = "stop";
                             }
                         }
-                        StringBuilder outToClient = new StringBuilder().append(hangman_art_array[5 - numOfWrongGuess]).append("\n\nThe word was: " + guessingWord + "\nGame Over!! Play again? (y/n)");
+                        StringBuilder outToClient = new StringBuilder().append(hangman_art_array[5 - numOfWrongGuess]).append("\n\nThe word was: " + guessingWord + "\nGood Game!! Do you wish to play again? (y/n)");
                         out_buffer = outToClient.toString().getBytes();
                         packet = new DatagramPacket(out_buffer, out_buffer.length, clientAddress, clientPort);
                         serverSocket.send(packet);
@@ -182,7 +182,7 @@ public class Server extends Thread {
                         }
                     } while (playAgain == 'y');
 
-                    StringBuilder outToClient = new StringBuilder().append("Thank you for playing\nGoodbye!");
+                    StringBuilder outToClient = new StringBuilder().append("Thank you for playing\nSee you soon!!\nGoodbye!");
                     out_buffer = outToClient.toString().getBytes();
                     packet = new DatagramPacket(out_buffer, out_buffer.length, clientAddress, clientPort);
                     serverSocket.send(packet);
@@ -205,7 +205,7 @@ public class Server extends Thread {
             try {
                 Random randomGenerator = new Random();
                 int randomPort = randomGenerator.nextInt(maxPortNumber) + 1;
-                Thread t = new Server(randomPort);
+                Thread t = new Hangman_UDP_Server(randomPort);
                 t.start();
                 available_udp_port = randomPort;
             } catch (IOException e) {
@@ -217,7 +217,7 @@ public class Server extends Thread {
         }
 
         try {
-            Thread t = new Server(available_udp_port);
+            Thread t = new Hangman_UDP_Server(available_udp_port);
             t.start();
         } catch (IOException e) {
             e.printStackTrace();

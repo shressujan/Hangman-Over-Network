@@ -4,11 +4,11 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class Client {
+public class Play_Hangman_Over_UDP {
 
     public static void main(String[] args) throws IOException{
-        String host = args[0];
-        int server_port = Integer.parseInt(args[1]);
+        String host = "localhost";
+        int server_port = Integer.parseInt(args[0]);
 
         Scanner scanner = new Scanner(System.in);
         byte[] in_buffer = new byte[10000];
@@ -18,7 +18,7 @@ public class Client {
 
         byte[] buffer = null;
 
-        System.out.println("Start the Game? (y/n)");
+        System.out.println("Do you want to play the Game? (y/n)");
         char playGame = scanner.next().charAt(0);
         buffer = String.valueOf(playGame).getBytes();
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverIP, server_port);
