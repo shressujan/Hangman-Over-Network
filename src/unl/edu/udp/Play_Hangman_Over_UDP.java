@@ -7,7 +7,7 @@ import java.util.*;
 public class Play_Hangman_Over_UDP {
 
     public static void main(String[] args) throws IOException{
-        String host = "localhost";
+        String host = "cse.unl.edu";
         int server_port = Integer.parseInt(args[0]);
 
         Scanner scanner = new Scanner(System.in);
