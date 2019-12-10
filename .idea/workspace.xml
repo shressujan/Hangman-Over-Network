@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98215c27-2209-4971-94d6-23e014bd973b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Game_Server_Instance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/Hangman_TCP_Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Hangman_TCP_Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/Play_Hangman_Over_TCP.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Play_Hangman_Over_TCP.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/unl/edu/udp/Play_Hangman_Over_UDP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/udp/Play_Hangman_Over_UDP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/Hangman_TCP_Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/Hangman_TCP_Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/unl/edu/tcp/Hangman_TCP_Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/unl/edu/tcp/Play_Hangman_Over_TCP.class" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +25,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -93,7 +99,7 @@
       <workItem from="1575910517410" duration="211000" />
       <workItem from="1575916672917" duration="170000" />
       <workItem from="1575981006299" duration="137000" />
-      <workItem from="1576013655899" duration="961000" />
+      <workItem from="1576013655899" duration="3839000" />
     </task>
     <servers />
   </component>
